@@ -1,0 +1,43 @@
+# dplyyr is inside tidyverse
+# base doesn't need to be loaded
+# library(dplyr)
+# library(base)
+# library(dplyr)
+
+# load packages
+library(tidyverse)
+library(ggplot2)
+
+WAR21 <- data.frame(
+  WAR = sample(paste(seq.default(-2,7,1),'to',seq.default(-1,8,1)), 5000, TRUE)
+)
+
+WAR21percent <- WAR21 |>
+  mutate(
+    fWAR = factor(WAR,levels = paste(seq.default(-2,7,1),'to',seq.default(-1,8,1)))) |>
+  group_by(fWAR) |>
+  summarise(
+    n = n()
+  ) |>
+  ungroup() |>
+  mutate(Percent = n / sum(n))
+
+ggplot(WAR21, aes(x = WAR))+
+  geom_histogram(fill='steelblue', col='black', binwidth=1, center=0.5,
+                 # add stat = 'count'
+                 stat = 'count') +
+  geom_text(data = WAR21percent, aes(x = fWAR, y = n + 100, label = scales::percent(Percent, accuracy = 0.1)))+
+  
+  
+  labs(title = "2021 MLB fWAR Distribution, No PA/IP Minimums")+
+  scale_x_discrete(breaks = seq(-1.5, 7.5, by = 1.0),
+                   # updating bin labels (same length as breaks)
+                   labels = c('-2 to -1', '-1 to 0', '0 to 1', '1 to 2', '2 to 3', '3 to 4', '4 to 5', '5 to 6', '6 to 7', '7 to 8'))+
+  ylab ("")+
+  xlab("fWAR")+
+  # updating to removes y-axis counts and ticks
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.title = element_text(color="#993333", size=13, face="bold"),
+        plot.title = element_text(color="Dark Red", size=14, face="bold.italic"),
+        axis.text.x = element_text(color = "dark red", size = 9, face ="bold"))

@@ -1,0 +1,22 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+## Statistics
+
+Given two fair die $D1$ and $D2$ with the sum of eyes $S = D1 + D2$: Calculate the conditional probability $P(D1|S)$.
+
+$$
+P(D1|S) = \frac{P(S \cap D1)}{P(S)}
+$$
+
+```{r}
+die_probability <- function(S){
+  # Roll the second dice
+  D2 <- sample(1:6,1)
+  # Get the given sum
+  D1 <- S - D2
+}
+```
